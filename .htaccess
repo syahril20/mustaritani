@@ -1,0 +1,36 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect semua request ke folder public
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L,QSA]
+    
+    # Redirect root ke public/index.php
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ public/index.php [L]
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Prevent access to sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protect .env file
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect composer files
+<FilesMatch "composer\.(json|lock)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Set default charset
+AddDefaultCharset UTF-8
